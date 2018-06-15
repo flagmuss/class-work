@@ -1,0 +1,32 @@
+.task{
+    display: flex;
+    padding: 10px;
+    flex-flow: row wrap;
+    border-radius: 5px;
+    border: 1px solid #e3e3e3;
+    margin-top: 10px;
+    position: relative;
+}
+
+.task-text{
+    flex: 0 0 90%;
+}
+
+.task-checkbox{
+    flex: 0 0 5%;
+    cursor: pointer;
+}
+
+.task-date{
+    flex: 0 0 100%;
+    text-align: right;
+    color: #808080;
+}
+
+.remove-button{
+    position: absolute;
+    right: 8px;
+    top: 2px;
+    font-size: 25px;
+    cursor: pointer;
+}
