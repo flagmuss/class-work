@@ -6,24 +6,18 @@
         input = qs('#task-input'),
         taskContainer = qs('.task-list');
 
-
-
-    //[data-id = "1" data-remove="2" {data-id:1, data-remove:3}
-
-
-
     function createElement(elemName, options, attributes){
+        attributes = attributes || {};
         var elem = ce(elemName);
 
         Object.assign(elem, options);
 
-       object.keys(attributes).forEach(function(key){
-           elem.setAttribute(key, attributes[key]);
-       });
+
+        Object.keys(attributes).forEach(function(key){
+            elem.setAttribute(key, attributes[key]);
+        });
         return elem;
     }
-
-
 
     function Task(text){
         var dateCreated = new Date();
@@ -50,9 +44,8 @@
 
     function renderTask(task){
         var removeButton = createElement('DIV',
-            {innerText: '×', className: 'remove-button'});
-
-        removeButton.setAttribute('data-remove', task.id);
+            {innerText: '×', className: 'remove-button'},
+            {'data-remove': task.id});
 
         var textElem = createElement('DIV',
             {innerText: task.text, className: 'task-text'});
@@ -61,38 +54,51 @@
             {innerText: task.dateCreated, className: 'task-date'});
 
         var checkboxElem = createElement('INPUT',
-            {type: 'checkbox', className: 'task-checkbox'});
+            {type: 'checkbox', className: 'task-checkbox'},
+            {'data-check': task.id});
 
-        checkboxElem.setAttribute('data-check', task.id);
+        var taskElem = createElement('DIV',
+            {className: 'task'}, {'data-id': task.id});
 
-        var taskElem = createElement('DIV', {className: 'task'}, {'data-id: '});
-
-        taskElem.setAttribute('data-id', task.id);
-
-        taskElem.innerHTML += checkboxElem.outerHTML +
-            textElem.outerHTML +
-            removeButton.outerHTML +
-            dateElem.outerHTML;
+        taskElem.innerHTML += getElemsHtml([checkboxElem, textElem, removeButton, dateElem]);
 
         taskContainer.appendChild(taskElem);
     }
 
+    function getElemsHtml(elems){
+        return elems.map(
+            function (elem){ return elem.outerHTML}
+        ).join('');
+    }
+
     function onRemoveClick(event){
         var taskId = event.target.getAttribute('data-remove');
+
         if(taskId){
             qs('[data-id="'+ taskId +'"]').remove();
         }
     }
-    function OnCheckClick (event){
-        var taskId =  event.target.getAttribute('data-check');
+
+    function onCheckClick(event){
+        var taskId = event.target.getAttribute('data-check');
 
         if(taskId){
-            qs('[data-id="'+ taskId + '"]').classList.toggle('checked');
+            qs('[data-id="'+ taskId +'"]').classList.toggle('checked');
         }
     }
 
+
     input.addEventListener('keypress', createTask);
     taskContainer.addEventListener('click', onRemoveClick);
-    taskContainer.addEventListener('click', OnCheckClick);
-
+    taskContainer.addEventListener('click', onCheckClick);
 })();
+
+/* StorageServise.js           app.js
+
+function Storage(){
+addTask()
+removeTaskById()
+SetTask()
+UpdateTask()
+}
+ */
